@@ -1,5 +1,7 @@
 # RESTful API
 
+Адрес репозитория: [ссылка](https://github.com/if0ne/rocket-restful-api)
+
 Используемый язык: Rust 1.58.1
 
 Компиляция и запуск:
