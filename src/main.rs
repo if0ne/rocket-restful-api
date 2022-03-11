@@ -4,7 +4,7 @@ mod routes;
 
 use crate::database::PromoRepository;
 use rocket::http::Method;
-use rocket::{Config};
+use rocket::Config;
 use rocket_cors::{AllowedOrigins, CorsOptions};
 use rocket_okapi::openapi_get_routes;
 use rocket_okapi::swagger_ui::{make_swagger_ui, SwaggerUIConfig};
@@ -16,22 +16,17 @@ use crate::routes::promo::{
 };
 
 use crate::routes::promo::{
-    okapi_add_operation_for_add_promo_,
-    okapi_add_operation_for_get_all_promo_,
-    okapi_add_operation_for_get_promo_,
-    okapi_add_operation_for_edit_promo_,
-    okapi_add_operation_for_delete_promo_,
-    okapi_add_operation_for_raffle_promo_,
+    okapi_add_operation_for_add_promo_, okapi_add_operation_for_delete_promo_,
+    okapi_add_operation_for_edit_promo_, okapi_add_operation_for_get_all_promo_,
+    okapi_add_operation_for_get_promo_, okapi_add_operation_for_raffle_promo_,
 };
 
 use crate::routes::participant::{
-    okapi_add_operation_for_add_participant_,
-    okapi_add_operation_for_delete_participant_,
+    okapi_add_operation_for_add_participant_, okapi_add_operation_for_delete_participant_,
 };
 
 use crate::routes::prize::{
-    okapi_add_operation_for_add_prize_,
-    okapi_add_operation_for_delete_prize_,
+    okapi_add_operation_for_add_prize_, okapi_add_operation_for_delete_prize_,
 };
 
 #[rocket::main]

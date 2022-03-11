@@ -1,10 +1,12 @@
 use crate::database::PromoRepository;
 use crate::entities::promotion::{Promotion, RawPromotion, ShortPromotionInfo};
 use crate::entities::promotion_result::PromotionResult;
-use rocket_okapi::openapi;
 use rocket::serde::json::Json;
 use rocket::State;
 use rocket::{delete, get, post, put};
+use rocket::http::Status;
+use rocket_okapi::openapi;
+use crate::routes::get_status;
 
 ///Создание новой промоакции
 #[openapi(tag = "Create new promo")]
@@ -31,32 +33,35 @@ pub fn get_all_promo(db: &State<PromoRepository>) -> Json<Vec<ShortPromotionInfo
 ///id - идентификатор промоакции
 #[openapi(tag = "Get promo information")]
 #[get("/<id>")]
-pub fn get_promo(db: &State<PromoRepository>, id: u64) -> Json<Promotion> {
-    let promo = db.get_promo_by_id(id);
-    Json(promo.unwrap())
+pub fn get_promo(db: &State<PromoRepository>, id: u64) -> (Status, Json<Promotion>) {
+    get_status(db.get_promo_by_id(id))
 }
 
 ///Редактирование информации о промоакции
 ///id - идентификатор промоакции
 #[openapi(tag = "Edit promo's information")]
 #[put("/<id>", format = "json", data = "<promo>")]
-pub fn edit_promo(db: &State<PromoRepository>, id: u64, promo: Json<RawPromotion>) {
-    db.edit_promo_by_id(id, &promo.0)
+pub fn edit_promo(db: &State<PromoRepository>, id: u64, promo: Json<RawPromotion>) -> (Status, Json<()>) {
+    get_status(db.edit_promo_by_id(id, &promo.0))
 }
 
 ///Удаление промоакции
 ///id - идентификатор промоакции
 #[openapi(tag = "Delete promo")]
 #[delete("/<id>")]
-pub fn delete_promo(db: &State<PromoRepository>, id: u64) {
-    db.delete_promo_by_id(id)
+pub fn delete_promo(db: &State<PromoRepository>, id: u64) -> (Status, Json<()>) {
+    get_status(db.delete_promo_by_id(id))
 }
 
 ///Запуск лотереи промоакции
 ///id - идентификатор промоакции
 #[openapi(tag = "Raffle promo")]
 #[post("/<id>/raffle")]
-pub fn raffle_promo(db: &State<PromoRepository>, id: u64) -> Json<Vec<PromotionResult>> {
+pub fn raffle_promo(db: &State<PromoRepository>, id: u64) -> (Status, Json<Vec<PromotionResult>>) {
     let result = db.raffle_promo(id);
-    Json(result)
+
+    match result {
+        Ok(value) => (Status::Ok, Json(value)),
+        Err(_) => (Status::Conflict, Json(vec![]))
+    }
 }

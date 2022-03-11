@@ -50,45 +50,61 @@ impl Promotion {
         self.participants.push(participant)
     }
 
-    pub fn delete_participant(&mut self, participant_id: u64) {
+    pub fn delete_participant(&mut self, participant_id: u64) -> Result<(), ()> {
         let index = self
             .participants
             .iter()
             .enumerate()
             .find(|item| item.1.get_id() == participant_id)
             .map(|item| item.0)
-            .unwrap();
+            .ok_or(())?;
         self.participants.remove(index);
+
+        Ok(())
     }
 
     pub fn add_prize(&mut self, prize: Prize) {
         self.prizes.push(prize)
     }
 
-    pub fn delete_prize(&mut self, prize_id: u64) {
+    pub fn delete_prize(&mut self, prize_id: u64) -> Result<(), ()> {
         let index = self
             .prizes
             .iter()
             .enumerate()
             .find(|item| item.1.get_id() == prize_id)
             .map(|item| item.0)
-            .unwrap();
+            .ok_or(())?;
         self.prizes.remove(index);
+
+        Ok(())
     }
 
-    pub fn raffle(&self) -> Vec<PromotionResult> {
+    pub fn raffle(&self) -> Result<Vec<PromotionResult>, ()> {
         if self.prizes.len() == self.participants.len() {
             let prizes_and_participants = self
                 .prizes
                 .iter()
                 .zip(self.participants.iter())
                 .collect::<Vec<(_, _)>>();
-            prizes_and_participants
+            Ok(prizes_and_participants
                 .iter()
                 .map(|item| PromotionResult::new(item.1, item.0))
-                .collect()
+                .collect())
         } else {
-            vec![]
+            Err(())
+        }
+    }
+}
+
+impl Default for Promotion {
+    fn default() -> Self {
+        Promotion {
+            id: 0,
+            name: "".to_string(),
+            description: "".to_string(),
+            prizes: vec![],
+            participants: vec![]
         }
     }
 }
