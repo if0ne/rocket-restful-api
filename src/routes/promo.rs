@@ -9,14 +9,14 @@ use rocket_okapi::openapi;
 use crate::routes::get_status;
 
 ///Создание новой промоакции
-#[openapi(tag = "Create new promo")]
+#[openapi(tag = "Promo")]
 #[post("/", format = "json", data = "<promo>")]
 pub fn add_promo(db: &State<PromoRepository>, promo: Json<RawPromotion>) -> Json<u64> {
     Json(db.insert_promo(promo.0))
 }
 
 ///Получение короткой информации о всех промоакциях
-#[openapi(tag = "Get all promos")]
+#[openapi(tag = "Promo")]
 #[get("/")]
 pub fn get_all_promo(db: &State<PromoRepository>) -> Json<Vec<ShortPromotionInfo>> {
     let all_promo = db.get_all_promo();
@@ -31,7 +31,7 @@ pub fn get_all_promo(db: &State<PromoRepository>) -> Json<Vec<ShortPromotionInfo
 
 ///Получение информации о промоакции
 ///id - идентификатор промоакции
-#[openapi(tag = "Get promo information")]
+#[openapi(tag = "Promo")]
 #[get("/<id>")]
 pub fn get_promo(db: &State<PromoRepository>, id: u64) -> (Status, Json<Promotion>) {
     get_status(db.get_promo_by_id(id))
@@ -39,7 +39,7 @@ pub fn get_promo(db: &State<PromoRepository>, id: u64) -> (Status, Json<Promotio
 
 ///Редактирование информации о промоакции
 ///id - идентификатор промоакции
-#[openapi(tag = "Edit promo's information")]
+#[openapi(tag = "Promo")]
 #[put("/<id>", format = "json", data = "<promo>")]
 pub fn edit_promo(db: &State<PromoRepository>, id: u64, promo: Json<RawPromotion>) -> (Status, Json<()>) {
     get_status(db.edit_promo_by_id(id, &promo.0))
@@ -47,7 +47,7 @@ pub fn edit_promo(db: &State<PromoRepository>, id: u64, promo: Json<RawPromotion
 
 ///Удаление промоакции
 ///id - идентификатор промоакции
-#[openapi(tag = "Delete promo")]
+#[openapi(tag = "Promo")]
 #[delete("/<id>")]
 pub fn delete_promo(db: &State<PromoRepository>, id: u64) -> (Status, Json<()>) {
     get_status(db.delete_promo_by_id(id))
@@ -55,7 +55,7 @@ pub fn delete_promo(db: &State<PromoRepository>, id: u64) -> (Status, Json<()>) 
 
 ///Запуск лотереи промоакции
 ///id - идентификатор промоакции
-#[openapi(tag = "Raffle promo")]
+#[openapi(tag = "Promo")]
 #[post("/<id>/raffle")]
 pub fn raffle_promo(db: &State<PromoRepository>, id: u64) -> (Status, Json<Vec<PromotionResult>>) {
     let result = db.raffle_promo(id);
