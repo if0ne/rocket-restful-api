@@ -1,8 +1,11 @@
 use crate::entities::participant::Participant;
 use crate::entities::prize::Prize;
+use rocket_okapi::okapi::schemars;
+use rocket_okapi::okapi::schemars::JsonSchema;
 use serde::Serialize;
 
-#[derive(Serialize)]
+#[derive(Serialize, JsonSchema)]
+#[serde(rename_all = "camelCase")]
 pub struct PromotionResult {
     winner: Participant,
     prize: Prize,

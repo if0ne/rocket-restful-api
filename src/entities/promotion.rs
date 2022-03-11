@@ -1,14 +1,23 @@
 use crate::entities::participant::Participant;
 use crate::entities::prize::Prize;
 use crate::entities::promotion_result::PromotionResult;
+use rocket_okapi::okapi::schemars;
+use rocket_okapi::okapi::schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
-#[derive(Clone, Serialize)]
+///Промоакция
+#[derive(Clone, Serialize, JsonSchema)]
+#[serde(rename_all = "camelCase")]
 pub struct Promotion {
+    ///Идентификатор
     id: u64,
+    ///Название
     name: String,
+    ///Описание
     description: String,
+    ///Список призов
     prizes: Vec<Prize>,
+    ///Список участников
     participants: Vec<Participant>,
 }
 
@@ -84,16 +93,25 @@ impl Promotion {
     }
 }
 
-#[derive(Deserialize)]
+///Информация о новой промоакции
+#[derive(Deserialize, JsonSchema)]
+#[serde(rename_all = "camelCase")]
 pub struct RawPromotion {
+    ///Название
     pub name: String,
+    ///Описание
     pub description: String,
 }
 
-#[derive(Serialize)]
+///Краткая информация о промоакции
+#[derive(Serialize, JsonSchema)]
+#[serde(rename_all = "camelCase")]
 pub struct ShortPromotionInfo {
+    ///Идентификатор
     id: u64,
+    ///Название
     name: String,
+    ///Описание
     description: String,
 }
 

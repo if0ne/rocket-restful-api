@@ -1,13 +1,22 @@
+use rocket_okapi::okapi::schemars;
+use rocket_okapi::okapi::schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
-#[derive(Clone, Serialize)]
+///Участник промоакции
+#[derive(Clone, Serialize, JsonSchema)]
+#[serde(rename_all = "camelCase")]
 pub struct Participant {
+    ///Идентификатор
     id: u64,
+    ///Имя
     name: String,
 }
 
-#[derive(Deserialize)]
+///Информация о новом участнике
+#[derive(Deserialize, JsonSchema)]
+#[serde(rename_all = "camelCase")]
 pub struct RawParticipant {
+    ///Имя
     pub name: String,
 }
 

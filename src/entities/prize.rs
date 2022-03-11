@@ -1,20 +1,29 @@
+use rocket_okapi::okapi::schemars;
+use rocket_okapi::okapi::schemars::JsonSchema;
 use serde::{Deserialize, Serialize};
 
-#[derive(Clone, Serialize)]
+///Приз
+#[derive(Clone, Serialize, JsonSchema)]
+#[serde(rename_all = "camelCase")]
 pub struct Prize {
+    ///Идентификатор
     id: u64,
+    ///Описание
     description: String,
 }
 
-#[derive(Deserialize)]
+///Информация о новом призе
+#[derive(Deserialize, JsonSchema)]
+#[serde(rename_all = "camelCase")]
 pub struct RawPrize {
-    pub name: String,
+    ///Описание
+    pub description: String,
 }
 impl Prize {
     pub fn new(id: u64, promo: RawPrize) -> Self {
         Prize {
             id,
-            description: promo.name,
+            description: promo.description,
         }
     }
 
